@@ -8,5 +8,6 @@ a {
 }
 
 .button {
-  float: right
+  float: right;
+  margin-top: 2% !important;
 }
