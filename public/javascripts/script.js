@@ -7,8 +7,8 @@ $(document).ready(function() {
         var option = $(this).html();
         var coordinates_element = $('.input-lat').length;
         var active_option = $('a.active').html();
-        if (!coordinates_element && active_option != "Geographic coordinates") {
-            $('div.input-fields').append('<div class="field"><label class="input-label label-lat"></label><input class="input-lat" type="number" name="input-lat" placeholder=""></div>');
+        if (option == "Geographic coordinates" && !coordinates_element && active_option != "Geographic coordinates") {
+            $('div.input-fields').append('<div class="field"><label class="input-label label-lat"></label><input class="input-lat" type="text" name="input-lat" placeholder=""></div>');
             $('input.inpu').addClass('input-lon');
         } else if(option != "Geographic coordinates") {
             $('.label-lat').remove();
@@ -21,16 +21,33 @@ $(document).ready(function() {
 
     function show_description(identificator, type_input) {
         var type = $(identificator).html();
+        var input_name = convert_name(type);
         $('h4.title').html('Please, fill the input with the ' + type.toLowerCase());
         $('.input-label').html(type);
         if (type == "Geographic coordinates") {
-            $('.input-lat').attr('placeholder', 'Latitude');
-            $('.input').attr('placeholder', 'Longitude');     
-            $('.input-label').html('Longitude');       
-            $('.label-lat').html("Latitude");
+            set_inputs_coordinates();
         } else {
             $('.input').attr("placeholder", type);
+            $('.input').attr("name", input_name);
         }
         $('.input').attr("type", type_input);
+        $('form.form').attr('action', '/' + input_name)
+    }
+
+    function convert_name(name) {
+       name = name.toLowerCase();
+       var separate_name = name.split(' ');
+       return separate_name.join('_');
+    }
+
+    function set_inputs_coordinates() {
+        $('.input-lat')
+            .attr('placeholder', 'Latitude')
+            .attr('name', 'latitude');
+        $('.input')
+            .attr('placeholder', 'Longitude')
+            .attr('name', 'longitude');  
+        $('.input-label').html('Longitude');       
+        $('.label-lat').html("Latitude");
     }
 });
