@@ -34,4 +34,19 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+app.locals.capitalize_first_letter = function(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+app.locals.random_image = function(hola) {
+  var backgrounds =[
+    'ui card background-1', 
+    'ui card background-2',
+    'ui card background-3',
+    'ui card background-5',
+    'ui card background-6'
+  ]
+  var image = Math.floor(Math.random()*backgrounds.length);
+  return backgrounds[image];
+}
 module.exports = app;

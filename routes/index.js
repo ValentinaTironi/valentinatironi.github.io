@@ -4,7 +4,6 @@ var router = express.Router();
 var request = require('request');
 
 var data;
-var last_option;
 
 router.get('/', function(req, res, next) {
   res.render('index', {
@@ -13,16 +12,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/city_name', function(req, res, next) {
-  last_option = 'city_name';
   var city_name = req.body.city_name;
   city_name = capitalize_first_letter(city_name);
 
   request(`http://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${process.env.APPID}`, function (request, response, body) {
     if (body) {   
-      data = get_data(body)
+      data = get_data(body)      
       res.redirect('/');
     } else { 
-      res.render('error', {
+      res.render('error.jade', {
         message: 'Sorry',
         error: error
       }); 
@@ -31,11 +29,45 @@ router.post('/city_name', function(req, res, next) {
 });
 
 router.post('/city_id', function(req, res, next) {
-  last_option = 'city_id';
   var city_id = req.body.city_id;
   city_id = capitalize_first_letter(city_id);
 
   request(`http://api.openweathermap.org/data/2.5/weather?id=${city_id}&appid=${process.env.APPID}`, function (request, response, body) {
+    if (body) {   
+      data = get_data(body)
+      res.redirect('/');
+    } else { 
+      res.render('error.jade', {
+        message: 'Sorry',
+        error: error
+      }); 
+    }
+  });
+});
+
+router.post('/geographic_coordinates', function(req, res, next) {
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+
+  request(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.APPID}`, function (request, response, body) {
+    if (body) {         
+      data = get_data(body)      
+      res.redirect('/');
+    } else { 
+      res.render('error', {
+        message: 'Sorry',
+        error: error
+      }); 
+    }
+  });
+})
+
+router.post('/zip_code', function(req, res, next) {
+  var zip_code = req.body.zip_code;
+  zip_code = capitalize_first_letter(zip_code);
+
+  var consulta = `http://api.openweathermap.org/data/2.5/weather?zip=${zip_code}&appid=${process.env.APPID}`  
+  request(consulta, function (request, response, body) {
     if (body) {   
       data = get_data(body)
       res.redirect('/');
@@ -48,22 +80,8 @@ router.post('/city_id', function(req, res, next) {
   });
 });
 
-router.post('/geographic_coordinates', function(req, res, next) {
-  last_option = 'geographic_coordinates';
-  var latitude = req.body.latitude;
-  var longitude = req.body.longitude;
+router.post('/current_location', function(req, res, next) {
 
-  request(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.APPID}`, function (request, response, body) {
-    if (body) {   
-      data = get_data_coordinates(body)
-      res.redirect('/');
-    } else { 
-      res.render('error', {
-        message: 'Sorry',
-        error: error
-      }); 
-    }
-  });
 })
 function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -78,11 +96,4 @@ function get_data(body) {
   return data;
 }
 
-function get_data_coordinates(body) {
-  body = JSON.parse(body);
-  var data = get_data(body);
-  data.rain = body.rain;
-  data.name = body.name;
-  return data;
-}
 module.exports = router;

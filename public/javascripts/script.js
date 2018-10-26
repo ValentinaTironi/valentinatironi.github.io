@@ -50,4 +50,8 @@ $(document).ready(function() {
         $('.input-label').html('Longitude');       
         $('.label-lat').html("Latitude");
     }
+
+ 
+    navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
+
 });

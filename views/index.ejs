@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Weather</title>
+  <title>Current Weather</title>
 
   <!-- Jquery -->
   <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -20,7 +20,12 @@
 </head>
 
 <body>
-  <h1>Fill in the blanks to get the current climate</h1>
+  <div class="ui grid">
+    <h1 class="eight wide column">Get Current Weather!</h1>
+    <form class="eight wide column" method="post" action="/current_location">
+      <button class="ui inverted blue button submit-button" type="submit">Weather by current location</button>
+    </form>
+  </div>
   <div class="ui grid">
     <div class="four wide column">
       <div class="ui vertical fluid tabular menu">
@@ -33,7 +38,7 @@
     <div class="twelve wide stretched column">
       <h4 class="title"></h4>
       <div class="ui segment">
-        <form class="ui form" method="post" action="/city_name">
+        <form class="ui form" method="post" action="">
           <div class="input-fields">
             <div class="field">
               <label class="input-label"></label>
@@ -45,17 +50,55 @@
       </div>
     </div>
   </div>
+  
   <% if (data) { %>
-    <div class="twelve wide stretched column climate-data">
-      <div class="ui segment">
-        <% for (var element in data) {
-          if (data.hasOwnProperty(element)) { %>
-            <div class="field">
-              <label><%= element + ': ' + data[element] %></label>
+    <h2 class="climate-data center aligned header">Climate data</h2>
+    <div class="ui three cards">
+      <% for (var element in data) { %>
+        <div class="ui card">
+          <% if (data.hasOwnProperty(element)) { %>
+            <div class="content">
+              <% if (data[element].constructor == Object) { %>
+                <% var indicators = data[element] %>
+                <% for (var indicator in indicators) { %>
+                  <% if (indicators.hasOwnProperty(indicator)) { %>
+                    <div class="right aligned description">
+                      <div class="ui list">
+                          <div class="item">
+                            <i class="right triangle icon"></i>
+                            <div class="content">
+                              <div class="header"><%= capitalize_first_letter(indicator) %></div>
+                              <div class="description"><%= indicators[indicator] %></div>
+                            </div>
+                          </div>
+                      </div>  
+                    </div>
+                  <% } %>
+                <% } %>
+              <% } else { %>
+                <div class="right aligned description">
+                  <div class="right aligned description">
+                    <div class="ui list">
+                      <div class="item">
+                        <i class="right triangle icon"></i>
+                        <div class="content">
+                          <div class="header"><%= capitalize_first_letter(element) %></div>                                <div class="description"><%= data[element] %></div>
+                        </div>
+                      </div>
+                    </div>  
+                  </div>
+                </div>
+              <% }; %>
             </div>
           <% }; %>
-        <% }; %>
-      </div>
+          <div class="extra content">
+            <div class="header">
+              <img class="ui left aligned avatar image" src=<%= '/images/' + element + '.png' %>>
+              <span class="center aligned"><%= capitalize_first_letter(element) %></span>
+            </div>
+          </div>
+        </div>
+      <% }; %>
     </div>
   <% }; %>
 </body>
