@@ -19,8 +19,14 @@
 </head>
 
 <body>
-  <h1>Get ahre Weather!</h1>
-  <div class="ui grid">
+    <div class="ui grid">
+        <h1 class="eight wide column">Get Current Weather!</h1>
+        <form class="eight wide column" method="post" action="/current_location">
+          <input class="current_location hide" type="text" name="position" placeholder="">
+          <button class="ui inverted blue button submit-button current_location" type="submit">Weather by current location</button>
+        </form>
+      </div>
+    <div class="ui grid">
     <div class="four wide column">
       <div class="ui vertical fluid tabular menu">
         <a class="item active" type_input="text">City name</a>
@@ -51,7 +57,11 @@
       <h2>Error</h2>
       <div class="ui segment">
         <div class="field">
+          <% if (error) { %>
           <label><%= error.message %></label>
+          <% } else { %>
+            <label><%= message %></label>
+         <% } %>
         </div>
       </div>
     </div>

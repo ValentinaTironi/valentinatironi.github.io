@@ -15,3 +15,7 @@ a {
 .climate-data {
   margin-top: 5% !important;
 }
+
+.hide {
+  display: none;
+}

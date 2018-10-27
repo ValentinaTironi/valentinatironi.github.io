@@ -21,7 +21,7 @@ router.post('/city_name', function(req, res, next) {
       res.redirect('/');
     } else { 
       res.render('error.jade', {
-        message: 'Sorry',
+        message: 'An error was ocurred. Please, try again',
         error: error
       }); 
     }
@@ -38,7 +38,7 @@ router.post('/city_id', function(req, res, next) {
       res.redirect('/');
     } else { 
       res.render('error.jade', {
-        message: 'Sorry',
+        message: 'An error was ocurred. Please, try again',
         error: error
       }); 
     }
@@ -55,7 +55,7 @@ router.post('/geographic_coordinates', function(req, res, next) {
       res.redirect('/');
     } else { 
       res.render('error', {
-        message: 'Sorry',
+        message: 'An error was ocurred. Please, try again',
         error: error
       }); 
     }
@@ -73,7 +73,7 @@ router.post('/zip_code', function(req, res, next) {
       res.redirect('/');
     } else { 
       res.render('error', {
-        message: 'Sorry',
+        message: 'An error was ocurred. Please, try again',
         error: error
       }); 
     }
@@ -81,8 +81,30 @@ router.post('/zip_code', function(req, res, next) {
 });
 
 router.post('/current_location', function(req, res, next) {
+  var position = req.body.position;
+  if (position) {
+    var latitude = position.latitude;
+    var longitude = position.longitude;
+    
+    request(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.APPID}`, function (request, response, body) {
+      if (body) {         
+        data = get_data(body)      
+        res.redirect('/');
+      } else { 
+        res.render('error', {
+          message: 'An error was ocurred. Please, try again',
+          error: false
+        }); 
+      }
+    });
+  } else {
+    res.render('error', {
+      message: 'An error was ocurred. Please, try again',
+      error: false
+    });
+  }
+});
 
-})
 function capitalize_first_letter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }

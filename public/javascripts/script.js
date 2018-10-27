@@ -19,6 +19,7 @@ $(document).ready(function() {
         show_description(this, type_input);
     });
 
+    //functions
     function show_description(identificator, type_input) {
         var type = $(identificator).html();
         var input_name = convert_name(type);
@@ -51,7 +52,32 @@ $(document).ready(function() {
         $('.label-lat').html("Latitude");
     }
 
- 
-    navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
+    //get current location
+    var error;
+    var current_position;
 
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
+
+    function success(position) {
+        current_position = position;
+        console.log(position);
+    };
+      
+    function error(err) {
+        error = err;
+        console.warn('ERROR(' + err.code + '): ' + err.message);
+    };
+
+    $('button.current_location').on('click', function() {
+        navigator.geolocation.getCurrentPosition(success, error, options);
+        console.log(current_position);
+        
+       if (position) {
+           $('input.current_location').val(current_position);
+       };
+    })
 });
