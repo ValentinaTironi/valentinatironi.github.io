@@ -14,9 +14,8 @@ router.get('/', function(req, res, next) {
 router.post('/city_name', function(req, res, next) {
   var city_name = req.body.city_name;
   city_name = capitalize_first_letter(city_name);
-
   request(`http://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${process.env.APPID}`, function (request, response, body) {
-    if (body) {   
+    if (body) {         
       data = get_data(body)      
       res.redirect('/');
     } else { 
@@ -81,11 +80,10 @@ router.post('/zip_code', function(req, res, next) {
 });
 
 router.post('/current_location', function(req, res, next) {
-  var position = req.body.position;
-  if (position) {
-    var latitude = position.latitude;
-    var longitude = position.longitude;
-    
+  var latitude = req.body.latitude;
+  var longitude = req.body.longitude;
+  
+  if (latitude && longitude) {    
     request(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.APPID}`, function (request, response, body) {
       if (body) {         
         data = get_data(body)      
@@ -99,7 +97,7 @@ router.post('/current_location', function(req, res, next) {
     });
   } else {
     res.render('error', {
-      message: 'An error was ocurred. Please, try again',
+      message: 'Impossible access to your current location. Please, try writing your city name',
       error: false
     });
   }

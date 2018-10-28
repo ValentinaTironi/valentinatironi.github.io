@@ -53,31 +53,36 @@ $(document).ready(function() {
     }
 
     //get current location
+    
+    
     var error;
+    var current_position_lat;
+    var current_position_lon;
     var current_position;
-
+    
     var options = {
         enableHighAccuracy: true,
-        timeout: 5000,
+        timeout: 10000,
         maximumAge: 0
-      };
-
-    function success(position) {
-        current_position = position;
-        console.log(position);
     };
-      
+    
+    function success(position) {        
+        current_position = position.coords;
+        current_position_lat = position.coords.latitude;
+        current_position_lon = position.coords.longitude;
+    };
+    
     function error(err) {
         error = err;
         console.warn('ERROR(' + err.code + '): ' + err.message);
     };
-
-    $('button.current_location').on('click', function() {
-        navigator.geolocation.getCurrentPosition(success, error, options);
-        console.log(current_position);
+    
+    navigator.geolocation.getCurrentPosition(success, error, options);
         
-       if (position) {
-           $('input.current_location').val(current_position);
-       };
-    })
+    $('button.current_location').on('click', function() {
+        if (current_position) {
+            $('input.current_location-lat').val(current_position_lat);
+            $('input.current_location-lon').val(current_position_lon);
+        };
+    });  
 });

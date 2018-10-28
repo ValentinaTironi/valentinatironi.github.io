@@ -19,13 +19,14 @@
 </head>
 
 <body>
-    <div class="ui grid">
-        <h1 class="eight wide column">Get Current Weather!</h1>
-        <form class="eight wide column" method="post" action="/current_location">
-          <input class="current_location hide" type="text" name="position" placeholder="">
-          <button class="ui inverted blue button submit-button current_location" type="submit">Weather by current location</button>
-        </form>
-      </div>
+  <div class="ui grid">
+    <h1 class="eight wide column">Get Current Weather!</h1>
+    <form class="eight wide column" method="post" action="/current_location">
+      <input class="current_location-lat hide" type="text" name="latitude" placeholder="">
+      <input class="current_location-lon hide" type="text" name="longitude" placeholder="">
+      <button class="ui inverted blue button submit-button current_location" type="submit">Weather by current location</button>
+    </form>
+    </div>
     <div class="ui grid">
     <div class="four wide column">
       <div class="ui vertical fluid tabular menu">
