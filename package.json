@@ -1,7 +1,7 @@
 {
   "name": "weather-api",
   "version": "0.0.0",
-  "private": true,
+  "main": "app.js",
   "scripts": {
     "start": "nodemon ./bin/server"
   },
@@ -17,5 +17,8 @@
     "nodemon": "^1.18.4",
     "request": "^2.88.0",
     "semantic-ui": "^2.4.2"
+  },
+  "engines": {
+    "node": "8.11.3"
   }
 }
