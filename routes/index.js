@@ -15,7 +15,9 @@ router.post('/city_name', function(req, res, next) {
   var city_name = req.body.city_name;
   city_name = capitalize_first_letter(city_name);
   request(`http://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${process.env.APPID}`, function (request, response, body) {
-    if (body) {         
+    if (body) {
+      console.log(body);
+               
       data = get_data(body)      
       res.redirect('/');
     } else { 
