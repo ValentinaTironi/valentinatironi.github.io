@@ -15,9 +15,7 @@ router.post('/city_name', function(req, res, next) {
   var city_name = req.body.city_name;
   city_name = capitalize_first_letter(city_name);
   request(`http://api.openweathermap.org/data/2.5/weather?q=${city_name}&appid=${process.env.APPID}`, function (request, response, body) {
-    if (body) {
-      console.log(body);
-               
+    if (body) {               
       data = get_data(body)      
       res.redirect('/');
     } else { 
@@ -46,13 +44,15 @@ router.post('/city_id', function(req, res, next) {
   });
 });
 
-router.post('/geographic_coordinates', function(req, res, next) {
+router.post('/geographic_coordinates', function(req, res, next) {  
   var latitude = req.body.latitude;
   var longitude = req.body.longitude;
 
-  request(`http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.APPID}`, function (request, response, body) {
+  var consulta = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${process.env.APPID}`
+  
+  request(consulta, function (request, response, body) {
     if (body) {         
-      data = get_data(body)      
+      data = get_data(body)   
       res.redirect('/');
     } else { 
       res.render('error', {
@@ -113,7 +113,9 @@ function get_data(body) {
   body = JSON.parse(body);
   var data = {};
   data.main = body.main;  
-  data.visibility = body.visibility;
+  if (body.visibility) {
+    data.visibility = body.visibility
+  }
   data.wind = body.wind;
   return data;
 }
